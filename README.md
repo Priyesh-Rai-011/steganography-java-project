@@ -1,349 +1,266 @@
-# StegoSecure
+# StegoSecure 🔐
 
-A professional steganography platform that combines AES encryption with Least Significant Bit (LSB) steganography to securely hide encrypted messages within PNG images.
+Ever wanted to hide secret messages in images like a proper spy? Well, now you can! StegoSecure lets you embed encrypted text into PNG images so secretly that nobody will even know there's a hidden message in there.
 
-## Table of Contents
+Perfect for your next prank, sharing answers during online exams (just kidding!), or impressing your friends with some cool cryptography skills.
 
-- [Overview](#overview)
-- [Demo](#demo)
-- [Architecture](#architecture)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Documentation](#api-documentation)
-- [Security](#security)
-- [Contributing](#contributing)
-- [License](#license)
+## What's This All About?
 
-## Overview
+This project combines two awesome security techniques:
+1. **AES Encryption** - Your message gets scrambled with military-grade encryption
+2. **LSB Steganography** - The encrypted message gets hidden in image pixels
 
-StegoSecure provides a robust solution for secure data hiding by implementing a dual-layer security approach:
+So even if someone suspects your cat photo has hidden data, they still can't read it without your secret key!
 
-1. **Encryption Layer**: Messages are first encrypted using AES-256 encryption
-2. **Steganography Layer**: Encrypted messages are then embedded into PNG images using LSB technique
-
-This ensures that even if the presence of hidden data is detected, the content remains unreadable without the correct decryption key.
-
-## Demo
+## Demo 🎬
 
 ![StegoSecure Demo](demo/stegosecure-demo.gif)
 
-*Demo showing the complete workflow: encoding a secret message into an image and then decoding it back*
+*Watch me hide "My crush likes me back!" in this innocent-looking meme and then extract it back*
 
-## Architecture
+## How It Works (The Cool Technical Stuff)
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Frontend Layer                           │
-│                                                                 │
-│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │
-│  │   HTML5/CSS3    │  │   JavaScript    │  │  Responsive UI  │ │
-│  │   Interface     │  │   Controllers   │  │   Components    │ │
-│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                                   │
-                          HTTP REST API Calls
-                                   │
-┌─────────────────────────────────────────────────────────────────┐
-│                      Spring Boot Backend                       │
-│                                                                 │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                 Controller Layer                            │ │
-│  │                                                             │ │
-│  │    StegoController (@RestController)                       │ │
-│  │    ├── POST /api/hide                                      │ │
-│  │    ├── POST /api/reveal                                    │ │
-│  │    ├── POST /api/capacity                                  │ │
-│  │    └── GET  /api/test                                      │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-│                                   │                             │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                 Service Layer                               │ │
-│  │                                                             │ │
-│  │         StegoService (@Service)                             │ │
-│  │         ├── hideMessage()                                  │ │
-│  │         ├── revealMessage()                                │ │
-│  │         └── getImageCapacity()                             │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-│                                   │                             │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │                 Utility Layer                               │ │
-│  │                                                             │ │
-│  │  ┌─────────────────┐         ┌─────────────────────────────┐ │ │
-│  │  │    AESUtil      │         │ ImageSteganographyUtil      │ │ │
-│  │  │                 │         │                             │ │ │
-│  │  │ ├── encrypt()   │         │ ├── hideMessage()           │ │ │
-│  │  │ ├── decrypt()   │         │ ├── revealMessage()         │ │ │
-│  │  │ └── createKey() │         │ ├── getMaxCapacity()        │ │ │
-│  │  │                 │         │ ├── setBit()                │ │ │
-│  │  │                 │         │ ├── getBit()                │ │ │
-│  │  │                 │         │ └── binaryToString()        │ │ │
-│  │  └─────────────────┘         └─────────────────────────────┘ │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
-                                   │
-┌─────────────────────────────────────────────────────────────────┐
-│                     Data Processing                             │
-│                                                                 │
-│  Original Image (PNG) → AES Encryption → LSB Embedding         │
-│                           ↓                    ↓               │
-│  Stego Image (PNG) ← AES Decryption ← LSB Extraction           │
-└─────────────────────────────────────────────────────────────────┘
+Your Message → AES Encryption → Hide in Image Pixels → Innocent Looking Image
+     ↓                                                          ↓
+Downloaded Image ← AES Decryption ← Extract from Pixels ← Upload Stego Image
 ```
 
-### Component Responsibilities
+### The Architecture (For Those CS Interviews)
 
-#### Frontend Layer
-- **HTML5/CSS3 Interface**: Provides responsive UI with drag-and-drop file handling
-- **JavaScript Controllers**: Manages user interactions, form validation, and API communication
-- **Canvas-based Preview**: Real-time image preview with capacity calculations
+```
+┌─────────────────────────────────────────────┐
+│             Frontend (What You See)         │
+│  • Drag & Drop Interface                   │
+│  • Real-time Image Preview                 │
+│  • Capacity Calculator                     │
+│  • Responsive Design                       │
+└─────────────────────────────────────────────┘
+                      │
+                  REST API Calls
+                      │
+┌─────────────────────────────────────────────┐
+│         Spring Boot Backend                 │
+│                                            │
+│  ┌─────────────────────────────────────────┐ │
+│  │        StegoController                  │ │
+│  │  (Handles all your requests)           │ │
+│  │                                        │ │
+│  │  • POST /api/hide    (Hide message)    │ │
+│  │  • POST /api/reveal  (Find message)    │ │
+│  │  • POST /api/capacity (Check space)    │ │
+│  │  • GET /api/test     (Health check)    │ │
+│  └─────────────────────────────────────────┘ │
+│                      │                      │
+│  ┌─────────────────────────────────────────┐ │
+│  │         StegoService                    │ │
+│  │  (The brain of the operation)           │ │
+│  │                                        │ │
+│  │  • Orchestrates encryption + hiding    │ │
+│  │  • Manages image processing            │ │
+│  │  • Handles all the complex stuff       │ │
+│  └─────────────────────────────────────────┘ │
+│                      │                      │
+│  ┌─────────────────────────────────────────┐ │
+│  │           Utility Classes               │ │
+│  │                                        │ │
+│  │  AESUtil              ImageSteganographyUtil │
+│  │  • encrypt()          • hideMessage()  │ │
+│  │  • decrypt()          • revealMessage() │ │
+│  │  • Strong crypto      • Pixel magic    │ │
+│  └─────────────────────────────────────────┘ │
+└─────────────────────────────────────────────┘
+```
 
-#### Controller Layer (StegoController)
-- Handles HTTP requests and responses
-- Validates input parameters (file type, size, required fields)
-- Manages file upload operations
-- Returns appropriate HTTP status codes and error messages
+## Features That'll Blow Your Mind 🤯
 
-#### Service Layer (StegoService)
-- Orchestrates business logic between encryption and steganography
-- Manages image processing workflow
-- Handles BufferedImage conversions and byte array operations
-- Provides capacity calculations
+### What Makes This Cool:
+- **Double Protection**: Your message is encrypted AND hidden
+- **Invisible Changes**: The image looks exactly the same to human eyes
+- **Smart Capacity**: Tells you how much text you can hide before you try
+- **User-Friendly**: Just drag, drop, type, and download
+- **No Sign-up Needed**: Everything runs locally on your machine
 
-#### Utility Layer
-- **AESUtil**: Implements AES encryption/decryption with SHA-256 key derivation
-- **ImageSteganographyUtil**: Implements LSB steganography algorithms with message delimiters
+### Technical Highlights (For Your Resume):
+- Built with Spring Boot (because we're not savages)
+- Uses AES-256 encryption (NSA-approved level stuff)
+- Implements LSB steganography (the classic technique)
+- RESTful API design (because we follow best practices)
+- Responsive frontend (works on your phone too)
 
-### Data Flow
+## Tech Stack (What You'll Learn)
 
-1. **Encoding Process**:
-   ```
-   User Input → Image Upload → Capacity Check → Message Encryption 
-   → LSB Embedding → Stego Image Generation → File Download
-   ```
+**Backend:**
+- **Java 17** - The language that pays the bills
+- **Spring Boot** - Makes Java web development actually fun
+- **Maven** - Handles all the messy dependency stuff
+- **BufferedImage** - For all the pixel manipulation magic
 
-2. **Decoding Process**:
-   ```
-   Stego Image Upload → LSB Extraction → Message Decryption 
-   → Plain Text Display
-   ```
+**Frontend:**
+- **HTML5/CSS3** - The basics, but done right
+- **Vanilla JavaScript** - No bloated frameworks here
+- **Canvas API** - For that smooth image preview
+- **CSS Grid & Flexbox** - Modern layout techniques
 
-## Features
+## Getting Started (Super Easy!)
 
-### Core Functionality
-- **Dual-layer Security**: AES encryption combined with LSB steganography
-- **Lossless Embedding**: Uses PNG format to preserve image quality
-- **Capacity Analysis**: Real-time calculation of image hiding capacity
-- **User-friendly Interface**: Responsive design with drag-and-drop support
+### What You Need:
+- Java 17+ (Download from Oracle or use OpenJDK)
+- Maven (Usually comes with most IDEs)
+- Any text editor or IDE (IntelliJ IDEA recommended)
+- A browser (obviously)
 
-### Security Features
-- **AES-256 Key Derivation**: Uses SHA-256 to create consistent encryption keys
-- **Message Delimiters**: Ensures reliable message extraction
-- **Input Validation**: Comprehensive server-side validation
-- **Error Handling**: Secure error messages without sensitive data exposure
+### Setup (5 Minutes Max):
 
-### Technical Features
-- **RESTful API**: Clean, documented API endpoints
-- **In-memory Processing**: No persistent storage of sensitive data
-- **Cross-origin Support**: CORS enabled for frontend integration
-- **Comprehensive Logging**: Detailed operation logging for debugging
-
-## Technology Stack
-
-### Backend
-- **Java 17+**: Core programming language
-- **Spring Boot 3.x**: Web framework and dependency injection
-- **Spring Web**: RESTful web services
-- **SLF4J + Logback**: Logging framework
-- **Java AWT**: Image processing capabilities
-
-### Frontend
-- **HTML5**: Semantic markup
-- **CSS3**: Modern styling with CSS Grid and Flexbox
-- **Vanilla JavaScript**: No external dependencies
-- **Canvas API**: Image preview and manipulation
-
-### Build & Deployment
-- **Maven**: Dependency management and build automation
-- **Embedded Tomcat**: Application server
-- **Spring Boot DevTools**: Development-time features
-
-## Installation
-
-### Prerequisites
-- Java Development Kit (JDK) 17 or higher
-- Maven 3.6 or higher
-- Git
-
-### Quick Start
-
-1. **Clone the repository**
+1. **Grab the code:**
    ```bash
-   git clone https://github.com/yourusername/stegosecure.git
+   git clone https://github.com/Priyesh-Rai-011/stegosecure.git
    cd stegosecure
    ```
 
-2. **Build the application**
+2. **Build it:**
    ```bash
    mvn clean compile
    ```
 
-3. **Run the application**
+3. **Run it:**
    ```bash
    mvn spring-boot:run
    ```
 
-4. **Access the application**
+4. **Open your browser:**
    ```
    http://localhost:8080
    ```
 
-### Production Deployment
+That's it! You're now a steganography wizard 🧙‍♂️
 
-1. **Build JAR file**
-   ```bash
-   mvn clean package
-   ```
+## How to Use (The Fun Part)
 
-2. **Run the JAR**
-   ```bash
-   java -jar target/stegosecure-1.0.0.jar
-   ```
+### Hiding Your Secrets:
 
-## Usage
+1. **Choose "Encode Message"** from the homepage
+2. **Drop a PNG image** - Your meme, profile pic, whatever
+3. **Type your secret** - "Pizza party at 9 PM", "The answer is C", etc.
+4. **Create a password** - Something you'll remember but others won't guess
+5. **Hit "Encode & Download"** - Get your innocent-looking image
+6. **Share it anywhere** - Social media, email, print it out!
 
-### Encoding Messages
+### Revealing the Secrets:
 
-1. Navigate to the application home page
-2. Select "Encode Message"
-3. Upload a PNG image (carrier image)
-4. Enter your secret message
-5. Provide a strong encryption key
-6. Click "Encode & Download"
-7. Save the generated stego-image
+1. **Choose "Decode Message"**
+2. **Upload the secret image** 
+3. **Enter the password** - Same one you used to hide it
+4. **Click "Decode"** - Watch your message appear like magic!
 
-### Decoding Messages
+### Pro Tips:
+- Use strong passwords (not "password123")
+- Bigger images = more hiding space
+- The app tells you how much text you can hide
+- Save your passwords somewhere safe!
 
-1. Select "Decode Message" 
-2. Upload the stego-image
-3. Enter the exact decryption key used during encoding
-4. Click "Decode Message"
-5. View the revealed message
+## API Docs (For the Nerds)
 
-### Important Notes
+If you want to integrate this into your own projects:
 
-- **Key Management**: Store encryption keys securely - lost keys mean lost messages
-- **File Format**: Only PNG images are supported for optimal results
-- **Image Capacity**: Check capacity before encoding to ensure message fits
-- **Key Sensitivity**: Decryption keys are case-sensitive and must match exactly
-
-## API Documentation
-
-### Base URL
-```
-http://localhost:8080/api
+### Hide a Message:
+```bash
+curl -X POST http://localhost:8080/api/hide \
+  -F "image=@your-image.png" \
+  -F "message=Your secret here" \
+  -F "key=your-password"
 ```
 
-### Endpoints
-
-#### Health Check
-```http
-GET /api/test
-```
-**Response**: Server status and available endpoints
-
-#### Hide Message
-```http
-POST /api/hide
-Content-Type: multipart/form-data
-
-Parameters:
-- image: PNG file (multipart)
-- message: Secret text (form field)
-- key: Encryption key (form field)
-```
-**Response**: Stego-image file download
-
-#### Reveal Message
-```http
-POST /api/reveal
-Content-Type: multipart/form-data
-
-Parameters:
-- image: Stego-image PNG file (multipart)
-- key: Decryption key (form field)
-```
-**Response**: JSON with revealed message
-
-#### Check Capacity
-```http
-POST /api/capacity
-Content-Type: multipart/form-data
-
-Parameters:
-- image: PNG file (multipart)
-```
-**Response**: JSON with capacity information
-
-### Error Responses
-
-All endpoints return consistent error formats:
-```json
-{
-  "status": "error",
-  "message": "Descriptive error message",
-  "timestamp": 1640995200000
-}
+### Reveal a Message:
+```bash
+curl -X POST http://localhost:8080/api/reveal \
+  -F "image=@stego-image.png" \
+  -F "key=your-password"
 ```
 
-## Security
+### Check Image Capacity:
+```bash
+curl -X POST http://localhost:8080/api/capacity \
+  -F "image=@your-image.png"
+```
 
-### Encryption Details
-- **Algorithm**: AES with PKCS5Padding
-- **Key Derivation**: SHA-256 hash of user-provided key
-- **Key Length**: 128-bit AES keys
-- **Mode**: ECB (suitable for short messages with unique keys)
+## The Science Behind It 🔬
 
-### Steganography Details
-- **Technique**: Least Significant Bit (LSB) modification
-- **Channels**: RGB channels (3 bits per pixel)
-- **Delimiter**: Custom message terminator (`###EOM###`)
-- **Capacity**: ~3 bits per pixel minus delimiter overhead
+### Encryption (The Boring But Important Stuff):
+- Uses **AES encryption** - the same thing banks use
+- Your password gets hashed with **SHA-256** 
+- Creates a **128-bit key** for encryption
+- Even quantum computers would struggle with this
 
-### Security Considerations
-- Messages are encrypted before embedding
-- Keys are not stored or logged
-- Processing occurs entirely in memory
-- Original images are not modified permanently
-- Error messages avoid sensitive data leakage
+### Steganography (The Cool Stuff):
+- Modifies the **least significant bit** of each pixel
+- Uses **RGB channels** (3 bits per pixel)
+- Adds a special **delimiter** to mark message end
+- Changes are invisible to human eyes
 
-### Recommendations
-- Use strong, unique encryption keys
-- Store keys securely and separately from stego-images
-- Consider additional security layers for highly sensitive data
-- Regularly update dependencies for security patches
+### Why This Combo Rocks:
+- **Security**: Encrypted before hiding
+- **Invisibility**: No visual changes to image
+- **Deniability**: Looks like a normal image
+- **Reliability**: Built-in error checking
 
-## Contributing
+## Common Issues (And How to Fix Them)
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/new-feature`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature/new-feature`)
-5. Create a Pull Request
+**"My image is too small for my message"**
+- Use a bigger image or shorter message
+- The app calculates capacity for you
 
-### Development Guidelines
-- Follow Java coding conventions
-- Add comprehensive tests for new features
-- Update documentation for API changes
-- Ensure security best practices
+**"Wrong password error"**  
+- Passwords are case-sensitive
+- Make sure you're using the exact same password
+
+**"Only PNG files supported"**
+- Convert your JPEGs to PNG first
+- PNG is lossless, JPEGs mess up the hidden data
+
+**"Server not starting"**
+- Check if Java 17+ is installed
+- Make sure port 8080 isn't being used
+
+## Want to Contribute? 
+
+This started as a college project and could use more features! Here's how you can help:
+
+1. **Fork the repo** - Make it your own
+2. **Pick an issue** - Or suggest a new feature  
+3. **Code it up** - Follow the existing style
+4. **Test it** - Make sure it works
+5. **Submit a PR** - Let's review it together
+
+### Ideas for New Features:
+- Support for other image formats
+- Multiple encryption algorithms
+- Batch processing
+- Mobile app version
+- Integration with cloud storage
+
+## Learning Resources 📚
+
+If this project sparked your interest in cryptography and steganography:
+
+- **Cryptography**: "Crypto 101" by Crypto101.io
+- **Steganography**: "Hiding in Plain Sight" research papers
+- **Spring Boot**: Official Spring Boot documentation
+- **Java Security**: Oracle's security programming guide
+
+## Credits & Thanks
+
+- **Inspiration**: Every spy movie ever made
+- **Crypto Libraries**: Java's built-in security APIs
+- **UI Design**: Notion's clean aesthetic
+- **Testing**: My roommates who tried to break it
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - basically, do whatever you want with this code, just don't blame me if you get caught sending secret messages! 😄
 
 ---
 
-**Author**: [Priyesh Rai](https://github.com/yourusername)  
-**Contact**: priyeshrai.delhi@gmail.com  
-**Project Link**: https://github.com/yourusername/stegosecure
+**Built by**: [Priyesh Rai](https://github.com/Priyesh-Rai-011)  
+**Connect**: [LinkedIn](https://www.linkedin.com/in/priyesh-rai-88389b229/) | [Twitter](https://x.com/PriyeshRai_07)  
+**Star this repo if it helped you impress someone!** ⭐
