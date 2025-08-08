@@ -1,0 +1,24 @@
+# Ignore the git repository itself
+.git
+.gitignore
+
+# Ignore the Dockerfile and dockerignore file
+Dockerfile
+.dockerignore
+
+# Ignore IDE-specific files and folders
+.idea/
+*.iml
+*.iws
+
+# Ignore build output (the Dockerfile copies the final JAR from here)
+target/
+
+# Ignore Maven wrapper files
+.mvn/
+mvnw
+mvnw.cmd
+
+# NOTE: We DO NOT ignore src/ and pom.xml here because the
+# 'build' stage of the Dockerfile needs them. They will be
+# excluded from the final image automatically by the multi-stage build.
