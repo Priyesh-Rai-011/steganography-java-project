@@ -8,7 +8,8 @@
 
 This animation demonstrates the complete workflow for both encoding a secret message into an image and subsequently decoding it.
 
-![StegoSecure Demo GIF](https://user-images.githubusercontent.com/.../stegosecure-demo.gif) ---
+![StegoSecure Demo GIF](https://drive.google.com/file/d/1RjIotYbf7xqMqaYxEZNeVoQUqPx7KXYf/view?usp=sharing) 
+---
 
 ## 🏛️ Project Architecture
 
