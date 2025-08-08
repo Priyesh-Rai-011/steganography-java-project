@@ -1,0 +1,33 @@
+# Compiled Java class files
+*.class
+
+# Log files
+*.log
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Maven build directory
+/target/
+
+# IDE configuration files
+.idea/
+*.iml
+*.iws
+
+# Eclipse specific files
+.classpath
+.project
+.settings/
+
+# VS Code specific files
+.vscode/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Virtual machine crash logs
+hs_err_pid*

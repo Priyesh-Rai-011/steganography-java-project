@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StegoSecure - Professional Steganography</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /*
+        ========================================
+        Notion-Inspired Professional Theme
+        ========================================
+        */
+        :root {
+            --bg-main: #191919;
+            --bg-panel: #222222;
+            --border-color-soft: #333333;
+            --border-color-hard: #1F4068; /* New Accent Color */
+            --text-primary: #EAEAEA;
+            --text-secondary: #888888;
+            --accent-red: #1F4068; /* New Accent Color */
+            --accent-blue: #4A90E2;
+            --accent-purple: #7C4DFF; /* Added requested color */
+            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /*
+        ========================================
+        Base & Layout
+        ========================================
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        main {
+            flex-grow: 1;
+        }
+
+        /*
+        ========================================
+        Header
+        ========================================
+        */
+        .header {
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color-soft);
+            background-color: var(--bg-main);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .header-nav a {
+            color: #FF5722;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            color: #FF5722;
+        }
+
+        /*
+        ========================================
+        View Containers & Transitions
+        ========================================
+        */
+        .view {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /*
+        ========================================
+        Mode Selection Screen
+        ========================================
+        */
+        #view-mode-selection {
+            padding: 3rem 0;
+        }
+
+        #view-mode-selection.active .mode-selection-wrapper {
+            background-image: linear-gradient(rgba(0, 0, 0, .30), rgba(5, 5, 5, .95)), url('https://w.wallhaven.cc/full/vq/wallhaven-vqwlwl.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .mode-selection-container {
+            text-align: center;
+            padding: 5rem 0;
+            margin-bottom: 10px;
+        }
+
+        .mode-selection-container h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .mode-selection-container p {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .mode-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .mode-option {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color-soft);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .mode-option:hover {
+            background-color: #2a2a2a;
+            transform: translateY(-2px);
+        }
+
+        .mode-option h3 {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .mode-option h3 svg {
+            margin-right: 0.75rem;
+            color: var(--accent-blue);
+        }
+
+        .mode-option p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            padding-left: 2.25rem; /* Align with text */
+        }
+
+        /*
+        ========================================
+        Main Application Panel
+        ========================================
+        */
+        #view-app {
+            padding: 3rem 0;
+        }
+
+        .app-panel {
+            display: grid;
+            grid-template-columns: 1fr; /* Default to single column */
+            gap: 2rem;
+        }
+
+        .app-panel.with-preview {
+            grid-template-columns: 2fr 1fr; /* Two columns when preview is active */
+        }
+
+        .form-container {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color-soft);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+            font-weight: 500;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: #E43F5A;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .back-button:hover {
+            color: #E43F5A;
+        }
+
+        .back-button svg {
+            margin-right: 0.5rem;
+        }
+
+        /*
+        ========================================
+        Form Elements & Image Preview
+        ========================================
+        */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .input-field, .textarea-field {
+            width: 100%;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color-soft);
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            font-family: var(--font-main);
+            transition: border-color 0.2s ease;
+        }
+
+        .input-field:focus, .textarea-field:focus {
+            outline: none;
+            border-color: var(--border-color-hard);
+        }
+
+        .textarea-field {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* START: EDITED/NEW CSS */
+        .info-bar {
+            display: none; /* Hidden by default, shown by JS */
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5px;
+            margin-top: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: var(--accent-purple); /* The requested color */
+        }
+        /* END: EDITED/NEW CSS */
+
+        .file-upload-area {
+            border: 2px dashed var(--border-color-soft);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--border-color-hard);
+            background-color: #1c1c1c;
+        }
+
+        .file-upload-area p {
+            color: var(--text-secondary);
+        }
+
+        .file-upload-area input[type="file"] {
+            display: none;
+        }
+
+        .image-preview-container {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color-soft);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .image-preview-container canvas { /* Changed from img to canvas */
+            max-width: 100%;
+            border-radius: 6px;
+            border: 2px solid var(--border-color-hard);
+        }
+
+        .image-preview-container .file-info {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        /*
+        ========================================
+        Buttons & Results
+        ========================================
+        */
+        .btn-submit {
+            background-color: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            width: 100%;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #C1354E;
+        }
+
+        .btn-submit:disabled {
+            background-color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .loading, .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            display: none; /* Hidden by default */
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .result {
+            border: 1px solid var(--border-color-soft);
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .result.success {
+            background-color: rgba(74, 144, 226, 0.1);
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .result.error {
+            background-color: rgba(228, 63, 90, 0.1);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        /*
+        ========================================
+        Modal Styles
+        ========================================
+        */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--bg-panel);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color-soft);
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border-color-soft);
+            padding-bottom: 1rem;
+        }
+
+        .modal-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-blue);
+        }
+
+        .modal-content p, .modal-content li {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content ul, .modal-content ol {
+            padding-left: 1.5rem;
+        }
+
+        .modal-content code {
+            background-color: var(--bg-main);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /*
+        ========================================
+        Landing Page & Main Footer
+        ========================================
+        */
+        .landing-page-footer {
+            padding: 4rem 0;
+            border-top: 1px solid var(--border-color-soft);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p, .footer-section li, .footer-section a {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        .footer-section a:hover {
+            color: var(--text-primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-red);
+        }
+
+        .main-footer {
+            border-top: 1px solid var(--border-color-soft);
+            padding: 2rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /*
+        ========================================
+        Responsive Design
+        ========================================
+        */
+        @media (max-width: 900px) {
+            .app-panel.with-preview {
+                grid-template-columns: 1fr; /* Stack on smaller screens */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mode-options {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <h1>StegoSecure</h1>
+        <nav class="header-nav">
+            <a href="#" id="about-link">About</a>
+            <a href="#" id="manual-link">User Manual</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div id="view-mode-selection" class="view active">
+        <div class="mode-selection-wrapper">
+            <div class="container">
+                <div class="mode-selection-container">
+                    <h2>Steganography Toolkit</h2>
+                    <p>Securely embed or extract encrypted data from images. Choose an operation to begin.</p>
+                    <div class="mode-options">
+                        <div id="select-encode-mode" class="mode-option">
+                            <h3>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M4 22a2 2 0 0 1-2-2V18a2 2 0 0 1 2-2h4v6H4Z"/><path d="M4 16v-2a2 2 0 1 1 4 0v2"/><path d="M10 22v-6"/></svg>
+                                Encode Message
+                            </h3>
+                            <p>Hide a secret, encrypted message within a PNG image file.</p>
+                        </div>
+                        <div id="select-decode-mode" class="mode-option">
+                            <h3>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/><path d="M14 11a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/><path d="M14 11h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-1"/><path d="m10 11-4 4"/><path d="m10 15-1.5-1.5"/></svg>
+                                Decode Message
+                            </h3>
+                            <p>Reveal a hidden message from an image using the correct key.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="landing-page-footer">
+                <div class="footer-grid">
+                    <div class="footer-section">
+                        <h4>Core Technology</h4>
+                        <ul>
+                            <li>AES-256 Key Derivation</li>
+                            <li>Least Significant Bit (LSB)</li>
+                            <li>Java/Spring Boot Backend</li>
+                            <li>RESTful API Architecture</li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Features</h4>
+                        <ul>
+                            <li>Lossless PNG Support</li>
+                            <li>In-Memory Image Processing</li>
+                            <li>Secure, Ephemeral Operations</li>
+                            <li>Minimalist, Responsive UI</li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">API Documentation</a></li>
+                            <li><a href="#">Security Overview</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Get In Touch</h4>
+                        <p>Connect with the developer on professional platforms.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/Priyesh-Rai-011" title="GitHub">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/></svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/priyesh-rai-88389b229/" title="LinkedIn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                            </a>
+                            <a href="https://x.com/PriyeshRai_07" title="Twitter / X">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 1.4 3.3 4.9 3.3 4.9-6.1 1.2-18 0-18 0 .5 2.7 1.8 4.5 3.1 6 .8 1 1.4 1.7 1.4 1.7-1.3 1.2-2.2 2.6-3 4.1 2.4-1 4.1-2.5 5.5-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-app" class="view">
+        <div class="container">
+            <div class="app-panel" id="app-panel">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 id="form-title">Encode Message</h2>
+                        <button class="back-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                            Back
+                        </button>
+                    </div>
+                    <form id="stegoForm">
+                        <div class="form-group">
+                            <label for="imageInput">1. Carrier Image</label>
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <p>Click or drag & drop a PNG file here</p>
+                                <input type="file" id="imageInput" accept="image/png" required>
+                            </div>
+                        </div>
+                        <div class="form-group" id="message-group">
+                            <label for="messageInput">2. Secret Message</label>
+                            <textarea id="messageInput" class="textarea-field" placeholder="Your secret text goes here..."></textarea>
+                            <div class="info-bar" id="info-bar">
+                                <span id="capacity-text"></span>
+                                <span id="char-counter"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="keyInput" id="key-label">3. Encryption Key</label>
+                            <input type="text" id="keyInput" class="input-field" placeholder="A strong, private key" required>
+                        </div>
+                        <button type="submit" class="btn-submit" id="submitBtn">Encode & Download</button>
+                        <div class="loading" id="loadingIndicator">Processing...</div>
+                        <div class="result" id="resultBox"></div>
+                    </form>
+                </div>
+                <div class="image-preview-container" id="imagePreviewContainer" style="display: none;">
+                    <canvas id="imagePreviewCanvas"></canvas>
+                    <div class="file-info" id="fileInfo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="main-footer">
+    <div class="container">
+        <p>&copy; 2025 StegoSecure. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<div class="modal-overlay" id="about-modal">
+    <div class="modal-content">
+        <button class="modal-close-btn" data-close="about-modal">&times;</button>
+        <h2>About StegoSecure</h2>
+        <p>StegoSecure is a robust platform for secure data hiding, designed for professional and educational use cases where data integrity and confidentiality are paramount. It leverages a combination of modern cryptographic standards and steganographic techniques to invisibly embed data within images.</p>
+        <h3>Core Architecture</h3>
+        <p>The application is built with a backend-first approach, ensuring a stable and secure foundation. The data flows through a clean, modular architecture:</p>
+        <ul>
+            <li>A <strong>JavaScript Frontend</strong> provides a clean user interface for interacting with the system.</li>
+            <li>A <strong>Java Spring Boot Backend</strong> handles all core logic via a RESTful API. The <code>StegoController</code> manages HTTP requests.</li>
+            <li>The <code>StegoService</code> layer orchestrates the business logic, coordinating between encryption and embedding processes.</li>
+            <li><strong>Utility Classes</strong> (<code>AESUtil</code> and <code>ImageSteganographyUtil</code>) handle the low-level operations of AES encryption and Least Significant Bit (LSB) steganography.</li>
+        </ul>
+        <h3>Security Principles</h3>
+        <p>Security is the primary focus. Messages are first encrypted using AES, and only the resulting ciphertext is embedded. This ensures that even if the presence of a hidden message is detected, its content remains unreadable without the correct key.</p>
+    </div>
+</div>
+
+<div class="modal-overlay" id="manual-modal">
+    <div class="modal-content">
+        <button class="modal-close-btn" data-close="manual-modal">&times;</button>
+        <h2>User Manual</h2>
+        <h3>How to Encode (Hide) a Message</h3>
+        <ol>
+            <li><strong>Select "Encode Message"</strong> from the main screen.</li>
+            <li><strong>Upload Carrier Image:</strong> Click the designated area to select a PNG file from your computer, or simply drag and drop it. A preview will appear.</li>
+            <li><strong>Enter Secret Message:</strong> Type or paste the text you wish to hide into the message field.</li>
+            <li><strong>Set Encryption Key:</strong> Provide a strong, private key. <strong>This key is critical and must be remembered to retrieve the message later.</strong></li>
+            <li><strong>Encode & Download:</strong> Click the button. The system will encrypt your message, embed it into the image, and automatically download the new steganographic image (<code>encoded_image.png</code>) to your computer.</li>
+        </ol>
+
+        <h3>How to Decode (Reveal) a Message</h3>
+        <ol>
+            <li><strong>Select "Decode Message"</strong> from the main screen.</li>
+            <li><strong>Upload Steganographic Image:</strong> Upload the PNG file that contains the hidden message.</li>
+            <li><strong>Enter Decryption Key:</strong> You must enter the exact same key that was used during the encoding process.</li>
+            <li><strong>Decode Message:</strong> Click the button. If the key is correct and a message exists, it will be decrypted and displayed in the results box below.</li>
+        </ol>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- DOM Element References ---
+        const views = {
+            selection: document.getElementById('view-mode-selection'),
+            app: document.getElementById('view-app')
+        };
+        const appPanel = document.getElementById('app-panel');
+        const form = {
+            title: document.getElementById('form-title'),
+            messageGroup: document.getElementById('message-group'),
+            keyLabel: document.getElementById('key-label'),
+            submitBtn: document.getElementById('submitBtn'),
+            form: document.getElementById('stegoForm'),
+            imageInput: document.getElementById('imageInput'),
+            messageInput: document.getElementById('messageInput'),
+            keyInput: document.getElementById('keyInput'),
+            fileUploadArea: document.getElementById('fileUploadArea'),
+        };
+        // START: EDITED/NEW JS
+        const info = {
+            bar: document.getElementById('info-bar'),
+            capacityText: document.getElementById('capacity-text'),
+            charCounter: document.getElementById('char-counter')
+        };
+        // END: EDITED/NEW JS
+        const indicators = {
+            loading: document.getElementById('loadingIndicator'),
+            result: document.getElementById('resultBox')
+        };
+        const preview = {
+            container: document.getElementById('imagePreviewContainer'),
+            canvas: document.getElementById('imagePreviewCanvas'),
+            info: document.getElementById('fileInfo')
+        };
+        const modals = {
+            about: document.getElementById('about-modal'),
+            manual: document.getElementById('manual-modal')
+        };
+
+        // --- State Management ---
+        let currentMode = 'encode'; // 'encode' or 'decode'
+        let imageFile = null;
+        let maxCapacity = 0; // EDITED/NEW JS: To store capacity
+
+        // --- View Switching Logic ---
+        const showView = (viewName) => {
+            Object.values(views).forEach(v => v.classList.remove('active'));
+            if (views[viewName]) views[viewName].classList.add('active');
+        };
+
+        const setupMode = (mode) => {
+            currentMode = mode;
+            imageFile = null; // Reset file on mode change
+            maxCapacity = 0;  // EDITED/NEW JS: Reset capacity
+            form.form.reset();
+            preview.container.style.display = 'none';
+            appPanel.classList.remove('with-preview');
+            indicators.result.style.display = 'none';
+            info.bar.style.display = 'none'; // EDITED/NEW JS: Hide info bar on reset
+
+            if (mode === 'encode') {
+                form.title.textContent = 'Encode Message';
+                form.messageGroup.style.display = 'block';
+                form.keyLabel.textContent = '3. Encryption Key';
+                form.submitBtn.textContent = 'Encode & Download';
+            } else {
+                form.title.textContent = 'Decode Message';
+                form.messageGroup.style.display = 'none';
+                form.keyLabel.textContent = '2. Decryption Key';
+                form.submitBtn.textContent = 'Decode Message';
+            }
+            showView('app');
+        };
+
+        document.getElementById('select-encode-mode').addEventListener('click', () => setupMode('encode'));
+        document.getElementById('select-decode-mode').addEventListener('click', () => setupMode('decode'));
+        document.querySelector('.back-button').addEventListener('click', () => showView('selection'));
+
+        // --- Modal Logic ---
+        const toggleModal = (modalId, show) => {
+            const modal = modals[modalId];
+            if (modal) {
+                modal.classList.toggle('visible', show);
+            }
+        };
+
+        document.getElementById('about-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleModal('about', true);
+        });
+        document.getElementById('manual-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleModal('manual', true);
+        });
+        document.querySelectorAll('.modal-close-btn, .modal-overlay').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay') || e.target.hasAttribute('data-close')) {
+                    toggleModal('about', false);
+                    toggleModal('manual', false);
+                }
+            });
+        });
+
+        // --- File Handling & Preview ---
+        const handleFileSelect = (file) => {
+            if (!file) return;
+            if (!file.type.includes('png')) {
+                showResult('error', 'Invalid File: Only PNG images are supported.');
+                return;
+            }
+            imageFile = file;
+
+            // Show preview on canvas
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = preview.canvas;
+                    const ctx = canvas.getContext('2d');
+
+                    const maxHeight = 300;
+                    const scale = Math.min(1, maxHeight / img.height);
+                    const newWidth = img.width * scale;
+                    const newHeight = img.height * scale;
+
+                    canvas.width = newWidth;
+                    canvas.height = newHeight;
+
+                    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+                    preview.info.textContent = `${file.name} (${formatFileSize(file.size)})`;
+                    preview.container.style.display = 'flex';
+                    appPanel.classList.add('with-preview');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Fetch and display image capacity only in encode mode
+            if (currentMode === 'encode') {
+                checkImageCapacity(file);
+            }
+        };
+
+        form.fileUploadArea.addEventListener('click', () => form.imageInput.click());
+        form.imageInput.addEventListener('change', () => handleFileSelect(form.imageInput.files[0]));
+
+        // Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            form.fileUploadArea.addEventListener(eventName, e => e.preventDefault());
+        });
+        form.fileUploadArea.addEventListener('drop', (e) => {
+            handleFileSelect(e.dataTransfer.files[0]);
+        });
+
+        // START: EDITED/NEW JS - Character Counter Logic
+        form.messageInput.addEventListener('input', () => {
+            const currentLength = form.messageInput.value.length;
+            info.charCounter.textContent = `${currentLength} / ${maxCapacity}`;
+
+            // Optional: Add a warning color if the user exceeds the capacity
+            if (currentLength > maxCapacity) {
+                info.charCounter.style.color = '#e53935'; // A distinct red for warnings
+            } else {
+                info.charCounter.style.color = 'var(--accent-purple)'; // Revert to the default color
+            }
+        });
+        // END: EDITED/NEW JS
+
+        // --- Form Submission ---
+        form.form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validation
+            if (!imageFile) {
+                showResult('error', 'Please upload a PNG image.');
+                return;
+            }
+            if (!form.keyInput.value.trim()) {
+                showResult('error', 'A key is required.');
+                return;
+            }
+            if (currentMode === 'encode' && !form.messageInput.value.trim()) {
+                showResult('error', 'A message to hide is required.');
+                return;
+            }
+
+            toggleLoading(true);
+
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            formData.append('key', form.keyInput.value);
+
+            if (currentMode === 'encode') {
+                formData.append('message', form.messageInput.value);
+                await handleEncode(formData);
+            } else {
+                await handleDecode(formData);
+            }
+
+            toggleLoading(false);
+        });
+
+        // --- API Call Handlers ---
+        async function handleEncode(formData) {
+            try {
+                const response = await fetch('/api/hide', { method: 'POST', body: formData });
+                if (response.ok) {
+                    const blob = await response.blob();
+                    downloadFile(blob, 'encoded_image.png');
+                    showResult('success', 'Encoding successful. Your new image has been downloaded.');
+                } else {
+                    const errorData = await response.json();
+                    showResult('error', `Encoding Failed: ${errorData.message || 'Unknown error'}`);
+                }
+            } catch (error) {
+                showResult('error', 'A network or server error occurred during encoding.');
+            }
+        }
+
+        async function handleDecode(formData) {
+            try {
+                const response = await fetch('/api/reveal', { method: 'POST', body: formData });
+                const data = await response.json();
+                if (response.ok && data.status === 'success') {
+                    showResult('success', `Message Revealed:\n\n${data.message}`);
+                } else {
+                    showResult('error', `Decoding Failed: ${data.message || 'Invalid key or no message found.'}`);
+                }
+            } catch (error) {
+                showResult('error', 'A network or server error occurred during decoding.');
+            }
+        }
+
+        async function checkImageCapacity(imageFile) {
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            info.bar.style.display = 'flex'; // Show the bar with a loading message
+            info.capacityText.textContent = 'Calculating capacity...';
+            info.charCounter.textContent = '';
+
+            try {
+                const response = await fetch('/api/capacity', { method: 'POST', body: formData });
+                const data = await response.json();
+                if (response.ok && data.status === 'success') {
+                    // START: EDITED/NEW JS
+                    maxCapacity = data.capacityCharacters; // Store capacity
+                    info.capacityText.textContent = `Image capacity: ~${maxCapacity} characters.`;
+                    info.charCounter.textContent = `0 / ${maxCapacity}`; // Initialize counter
+                    // END: EDITED/NEW JS
+                } else {
+                    info.capacityText.textContent = 'Could not determine capacity.';
+                }
+            } catch (error) {
+                console.error('Could not fetch image capacity.', error);
+                info.capacityText.textContent = 'Could not determine capacity.';
+            }
+        }
+
+        // --- UI Utility Functions ---
+        const toggleLoading = (isLoading) => {
+            indicators.loading.style.display = isLoading ? 'block' : 'none';
+            form.submitBtn.disabled = isLoading;
+            if (isLoading) indicators.result.style.display = 'none';
+        };
+
+        const showResult = (type, message) => {
+            indicators.result.className = `result ${type}`;
+            indicators.result.textContent = message;
+            indicators.result.style.display = 'block';
+        };
+
+        const formatFileSize = (bytes) => {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+        };
+
+        const downloadFile = (blob, filename) => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        };
+    });
+</script>
+
+</body>
+</html>
