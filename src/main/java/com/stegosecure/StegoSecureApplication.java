@@ -17,6 +17,6 @@ public class StegoSecureApplication {
         logger.info("✅ StegoSecure Backend Started Successfully!");
         logger.info("📡 Server running on: http://localhost:8080");
         logger.info("🧪 Ready for backend testing!");
-        logger.info("🔗 Test URL: http://localhost:8080/api/test");
+        logger.info("🔗 Test URL: http://stego-secure-alb-1248487578.ap-south-1.elb.amazonaws.com/");
     }
 }
