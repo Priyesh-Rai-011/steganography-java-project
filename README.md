@@ -51,7 +51,7 @@ StegoSecure uses a classic three-tier architecture to ensure a clean separation 
 
 ---
 
-### ► Getting Started Locally
+## ► Getting Started Locally
 
 **Prerequisites:**
 * Java 17+
@@ -59,7 +59,7 @@ StegoSecure uses a classic three-tier architecture to ensure a clean separation 
 
 1.  **Clone & Build:**
     ```sh
-    git clone [https://github.com/Priyesh-Rai-011/steganography-java-project.git](https://github.com/Priyesh-Rai-011/steganography-java-project.git)
+    git clone https://github.com/Priyesh-Rai-011/steganography-java-project.git
     cd steganography-java-project
     mvn clean install
     ```
