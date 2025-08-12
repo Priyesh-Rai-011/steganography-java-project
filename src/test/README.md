@@ -1,33 +1,30 @@
 # Testing Strategy
 
-This document outlines the testing strategy for the StegoSecure application, ensuring the reliability and correctness of its core functionalities.
+This document outlines the testing strategy for the StegoSecure application, ensuring the reliability, security, and correctness of its core functionalities.
 
-## 🧪 Testing Approach
+---
 
-The project employs a multi-layered testing approach, combining unit tests for individual components and integration tests for the complete workflow.
+### ► Our Approach to Quality
 
-* **Unit Tests**: These are focused on a single class or component to verify its logic in isolation. They are fast, reliable, and form the foundation of our testing pyramid.
-* **Integration Tests**: These tests verify that different components of the application work together as expected. For this project, the primary integration test ensures that a message that is hidden can be successfully revealed, covering the entire service layer.
+The project employs a multi-layered testing approach, combining fine-grained **unit tests** for component logic and comprehensive **integration tests** for the complete workflow. This strategy ensures that individual parts work correctly and that they function together as a whole.
 
-## ✅ Key Test Classes
+---
 
-The tests are located in the `src/test/java/com/stegosecure` directory, mirroring the main source structure.
+### ✅ Test Suite Breakdown
 
-* **`util/AESUtilTest.java`**:
-    * Verifies that the `AESUtil` class can correctly encrypt and decrypt messages.
-    * Ensures that decryption fails when the wrong key is used, which is a critical security check.
+The tests are located in `src/test/java/com/stegosecure`, mirroring the main source structure.
 
-* **`util/ImageSteganographyUtilTest.java`**:
-    * Tests the core LSB logic by hiding and then revealing a message from a test image.
-    * Confirms that an exception is thrown if a message is too large for the carrier image.
+| Test Class                          | Type            | Purpose                                                                                                                              |
+| :---------------------------------- | :-------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
+| **`AESUtilTest.java`** | Unit Test       | <li>Verifies successful encryption and decryption.</li><li>Ensures decryption **fails** with an incorrect key (critical security check).</li> |
+| **`ImageSteganographyUtilTest.java`**| Unit Test       | <li>Tests the core LSB logic for hiding and revealing data.</li><li>Confirms an exception is thrown if a message is too large.</li>      |
+| **`StegoServiceTest.java`** | Integration Test| <li>Uses `@SpringBootTest` to test the full application context.</li><li>Validates the end-to-end `hide` and `reveal` workflow.</li>     |
 
-* **`service/StegoServiceTest.java`**:
-    * This is an **integration test** that uses the live Spring Boot application context (`@SpringBootTest`).
-    * It tests the entire `hideMessage` and `revealMessage` workflow, ensuring the service correctly coordinates the encryption and steganography utilities.
+---
 
-## ▶️ How to Run Tests
+### ► How to Run Tests
 
-You can run all tests using the standard Maven command from the project's root directory:
+You can execute the complete test suite using the standard Maven command from the project's root directory. The build will only succeed if all tests pass.
 
 ```sh
 mvn test
