@@ -8,7 +8,8 @@
 
 This animation demonstrates the complete workflow for both encoding a secret message into an image and subsequently decoding it.
 
-![Image](https://github.com/user-attachments/assets/3356a8eb-4f9e-4fc3-95ab-bb0099796beb)
+![Image](https://github.com/user-attachments/assets/a32c1ab4-9a5a-4f6c-ae8c-2a30d8e58ea3)
+
 ---
 
 ## 🏛️ Project Architecture
