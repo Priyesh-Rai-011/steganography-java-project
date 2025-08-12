@@ -11,7 +11,6 @@ A robust web application for hiding encrypted data within images using Least Sig
 
 ---
 
-
 ### ► Live Deployments
 
 The application is deployed and publicly accessible on the following platforms:
